@@ -1,0 +1,46 @@
+
+.teacher-container {
+  width: 100%;
+  /*border: 1px solid #666666;*/
+}
+
+.add-button-container {
+  /*border: 1px solid #666666;*/
+  margin-bottom: 30px;
+}
+
+.teacher-item {
+  width: 100%;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.teacher-cells-row-1,
+.teacher-cells-row-2 {
+  display: table-cell;
+  padding-bottom: 10px;
+  padding-right: 15px;
+  /*width: 25%;*/
+  /*border: 1px solid #ddd;*/
+}
+
+.teacher-ordering {
+  width: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.first-item {
+  margin-right: 16px;
+}
+
+.last-item {
+  margin-left: 16px;
+}
+
+.mandatory {
+  border: 1px solid #9d261d !important;
+  background-color: #f2dede !important;
+}
