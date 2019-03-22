@@ -96,8 +96,10 @@
   }
 
   validateFields = function(e) {
+    let task = document.getElementsByName('task');
     let fields = {'level':'', 'lastname':'', 'firstname':''}; 
-    if(!GETTER.teacher.validateFields(fields)) {
+
+    if(task[0].value != 'note.cancel' && !GETTER.teacher.validateFields(fields)) {
       e.preventDefault();
       e.stopPropagation();
       return false;
