@@ -7,7 +7,7 @@
     //
     let rootLocation = $('#root-location').val();
     //
-    let props = {'component':'notebook', 'item':'teacher', 'ordering':true, 'rootLocation':rootLocation, 'rowsCells':[5,3]};
+    let props = {'component':'notebook', 'item':'teacher', 'ordering':true, 'rootLocation':rootLocation, 'rowsCells':[5,4]};
     const teacher = new Omkod.DynamicItem(props);
     //
     GETTER.teacher = teacher;
@@ -34,7 +34,7 @@
   populateTeacherItem = function(idNb, data) {
     // Defines the default field values.
     if(data === undefined) {
-      data = {'id':'', 'school_name':'', 'lastname':'', 'firstname':'', 'level':'', 'certified':0};
+      data = {'id':'', 'school_name':'', 'name':'', 'classrooms':[], 'level':'', 'certified':0};
     }
 
     // Creates the hidden input element to store the attribute id.
@@ -50,7 +50,7 @@
     $('#teacher-row-1-cell-2-'+idNb).append(elem);
 
     // Text input tag:
-    attribs = {'type':'text', 'name':'teacher_lastname_'+idNb, 'id':'teacher-lastname-'+idNb, 'value':data.lastname};
+    attribs = {'type':'text', 'name':'teacher_name_'+idNb, 'id':'teacher-name-'+idNb, 'value':data.name};
     $('#teacher-row-1-cell-3-'+idNb).append(GETTER.teacher.createElement('input', attribs));
 
     // Select tag:
@@ -72,19 +72,39 @@
 
     $('#teacher-row-2-cell-1-'+idNb).append(elem);
     $('#teacher-level-'+idNb).html(options);
+    // Update the chosen plugin.
+    $('#teacher-level-'+idNb).chosen();
 
     // Checkbox tag:
     attribs = {'type':'checkbox', 'name':'teacher_certified_'+idNb, 'id':'teacher-certified-'+idNb, 'value':'certified'};
 
-    if(data.certified) {
+    if(data.certified == 1) {
       attribs.checked = 'checked';
     }
 
     $('#teacher-row-2-cell-2-'+idNb).append(GETTER.teacher.createElement('input', attribs));
 
-    // Text input tag:
-    attribs = {'type':'text', 'name':'teacher_firstname_'+idNb, 'id':'teacher-firstname-'+idNb, 'value':data.firstname};
-    $('#teacher-row-2-cell-3-'+idNb).append(GETTER.teacher.createElement('input', attribs));
+    // Multiple Select tag:
+    attribs = {'name':'teacher_classrooms_'+idNb+'[]', 'id':'teacher-classrooms-'+idNb, 'multiple':'true'};
+    elem = GETTER.teacher.createElement('select', attribs);
+
+    // Builds the select options.
+    options = '<option value="">- Select -</option>';
+    for(let i = 0; i < 5; i++) {
+      let value = 'classroom'+ (i + 1);
+      let selected = '';
+
+      if(GETTER.teacher.inArray(value, data.classrooms)) {
+	selected = 'selected="selected"';
+      }
+
+      options += '<option value="'+value+'" '+selected+'>Classroom '+(i + 1)+'</option>';
+    }
+
+    $('#teacher-row-2-cell-3-'+idNb).append(elem);
+    $('#teacher-classrooms-'+idNb).html(options);
+    // Update the chosen plugin.
+    $('#teacher-classrooms-'+idNb).chosen();
   }
 
   reverseTeacherOrder = function(direction, idNb) {
@@ -97,7 +117,7 @@
 
   validateFields = function(e) {
     let task = document.getElementsByName('task');
-    let fields = {'level':'', 'lastname':'', 'firstname':''}; 
+    let fields = {'level':'', 'name':'', 'firstname':''}; 
 
     if(task[0].value != 'note.cancel' && !GETTER.teacher.validateFields(fields)) {
       e.preventDefault();

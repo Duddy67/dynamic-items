@@ -116,15 +116,21 @@ class NotebookModelNote extends JModelAdmin
 
     $db = $this->getDbo();
     $query = $db->getQuery(true);
-    //Gets the teachers linked to the note.
+    // Gets the teachers linked to the note.
     $query->select('t.*, n.title AS school_name')
 	  ->from('#__notebook_teacher AS t')
-	  ->join('LEFT', '#__notebook_note AS n ON n.id='.(int)$pk)
+	  ->join('LEFT', '#__notebook_note AS n ON n.id=t.school_id')
 	  ->where('t.note_id='.(int)$pk)
 	  ->order('t.ordering');
     $db->setQuery($query);
+    $teachers = $db->loadAssocList();
 
-    return $db->loadAssocList();
+    foreach($teachers as $key => $teacher) {
+      // Values from multiple select tags are encoded in JSON.   
+      $teachers[$key]['classrooms'] = json_decode($teacher['classrooms']);
+    }
+
+    return $teachers;
   }
 }
 

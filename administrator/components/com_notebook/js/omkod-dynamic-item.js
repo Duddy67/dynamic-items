@@ -404,13 +404,32 @@ Omkod.DynamicItem = class {
   }
 
   /**
+   * Checks if the given value is present into the given array.
+   *
+   * @param   string  needle     The value to search.
+   * @param   array   haystack   The array in which the given value is searched.
+   *
+   * @return  boolean            True if the value matches the type, false otherwise.
+  */
+  inArray(needle, haystack) {
+    let length = haystack.length;
+    for(let i = 0; i < length; i++) {
+      if(haystack[i] == needle) {
+	return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
    * Checks the type of the given value.
    *
    * @param   string  value      The value to check.
    * @param   string  valueType  The type to check the value against.
    * @param   object  extraType  A specific type to check. Object structure: {'type name':'regex to use'}
    *
-   * @return  boolean            True if the value matches the type, else otherwise.
+   * @return  boolean            True if the value matches the type, false otherwise.
   */
   checkValueType(value, valueType, extraType) {
     let regex = '';
