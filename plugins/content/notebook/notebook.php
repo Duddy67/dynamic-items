@@ -59,17 +59,18 @@ class plgContentNotebook extends JPlugin
           $order = $this->post['teacher_order_'.$teacherNb];
           $certified = (int)isset($this->post['teacher_certified_'.$teacherNb]);
 	  $classRooms = '[]';
+          $gender = $this->post['teacher_gender_'.$teacherNb];
 
 	  if(isset($this->post['teacher_classrooms_'.$teacherNb])) {
 	    $classRooms = json_encode($this->post['teacher_classrooms_'.$teacherNb]);
 	  }
 
-	  $values[] = $data->id.','.$schoolId.','.$db->Quote($name).','.$db->Quote($level).','.$db->Quote($classRooms).','.$certified.','.$order;
+	  $values[] = $data->id.','.$schoolId.','.$db->Quote($name).','.$db->Quote($level).','.$db->Quote($classRooms).','.$certified.','.$db->Quote($gender).','.$order;
 	}
       }
 
       if(!empty($values)) {
-	$columns = array('note_id', 'school_id', 'name', 'level', 'classrooms', 'certified', 'ordering');
+	$columns = array('note_id', 'school_id', 'name', 'level', 'classrooms', 'certified', 'gender', 'ordering');
 
 	$query->clear();
 	$query->insert('#__notebook_teacher')

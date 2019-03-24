@@ -34,7 +34,7 @@
   populateTeacherItem = function(idNb, data) {
     // Defines the default field values.
     if(data === undefined) {
-      data = {'id':'', 'school_name':'', 'name':'', 'classrooms':[], 'level':'', 'certified':0};
+      data = {'id':'', 'school_name':'', 'name':'', 'classrooms':[], 'level':'', 'certified':0, 'gender':'male'};
     }
 
     // Creates the hidden input element to store the attribute id.
@@ -105,6 +105,23 @@
     $('#teacher-classrooms-'+idNb).html(options);
     // Update the chosen plugin.
     $('#teacher-classrooms-'+idNb).chosen();
+
+    // Radio buttons:
+    attribs = {'type':'radio', 'name':'teacher_gender_'+idNb, 'id':'teacher-gender-'+idNb, 'value':'male'};
+
+    if(data.gender == 'male') {
+      attribs.checked = 'checked';
+    }
+
+    $('#teacher-row-2-cell-4-'+idNb).append(GETTER.teacher.createElement('input', attribs));
+
+    attribs = {'type':'radio', 'name':'teacher_gender_'+idNb, 'id':'teacher-gender-'+idNb, 'value':'female'};
+
+    if(data.gender == 'female') {
+      attribs.checked = 'checked';
+    }
+
+    $('#teacher-row-2-cell-4-'+idNb).append(GETTER.teacher.createElement('input', attribs));
   }
 
   reverseTeacherOrder = function(direction, idNb) {
