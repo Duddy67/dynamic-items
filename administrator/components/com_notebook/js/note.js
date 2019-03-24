@@ -7,7 +7,7 @@
     //
     let rootLocation = $('#root-location').val();
     //
-    let props = {'component':'notebook', 'item':'teacher', 'ordering':true, 'rootLocation':rootLocation, 'rowsCells':[5,4]};
+    let props = {'component':'notebook', 'item':'teacher', 'ordering':true, 'rootLocation':rootLocation, 'rowsCells':[5,4], 'Chosen':true};
     const teacher = new Omkod.DynamicItem(props);
     //
     GETTER.teacher = teacher;
@@ -134,7 +134,7 @@
 
   validateFields = function(e) {
     let task = document.getElementsByName('task');
-    let fields = {'level':'', 'name':'', 'firstname':''}; 
+    let fields = {'school-name':'', 'level':'', 'name':''}; 
 
     if(task[0].value != 'note.cancel' && !GETTER.teacher.validateFields(fields)) {
       e.preventDefault();

@@ -8,8 +8,10 @@ Omkod.DynamicItem = class {
     this.ordering = props.ordering;
     this.rowsCells = props.rowsCells;
     this.rootLocation = props.rootLocation;
+    this.Chosen = props.Chosen;
     // Initializes some utility variables
     this.idNbList = [];
+    // Used to keep each id unique during the session (ie: not reuse the id of a deleted item).
     this.removedIdNbs = [];
 
     // Creates the item container as well as the add button container.
@@ -89,7 +91,7 @@ Omkod.DynamicItem = class {
     this.createItemStructure(item, idNb);
 
     if(this.ordering) {
-      // Note: No need to add the new item id number to the list as it is updated 
+      // N.B:  No need to add the new item id number to the list as it is updated 
       //       in the itemReordering function.
       this.setItemOrdering(idNb);
     }
@@ -114,7 +116,7 @@ Omkod.DynamicItem = class {
    * @return  void
   */
   createItemStructure(item, idNb) {
-    // Note: row number = the rowsCells array indexes. 
+    // N.B:  row number = the rowsCells array indexes. 
     //       cell number = the rowsCells array values.
     for(let i = 0; i < this.rowsCells.length; i++) {
       let rowNb = i + 1;
@@ -157,7 +159,7 @@ Omkod.DynamicItem = class {
     this.removedIdNbs.push(idNb);
 
     if(this.ordering) {
-      // Note: No need to remove the item id number from the list as it is updated 
+      // N.B:  No need to remove the item id number from the list as it is updated 
       //       in the itemReordering function.
       this.itemReordering();
     }
@@ -379,21 +381,44 @@ Omkod.DynamicItem = class {
       // Checks the given fields for each item.
       for(let key in fields) {
 	let field = document.getElementById(this.itemType+'-'+key+'-'+this.idNbList[i]);
+
+	// Checks the select tags when the Chosen plugin is used.
+	let Chosen = null;
+	if(this.Chosen && (field.type == 'select-one' || field.type == 'select-multiple')) {
+	  // Gets the Chosen div.
+	  Chosen = document.getElementById(this.itemType+'_'+key+'_'+this.idNbList[i]+'_chzn');
+	}
+
 	// In case the field was previously not valid.
 	field.classList.remove('mandatory');
+
+	if(Chosen !== null) {
+	  Chosen.classList.remove('mandatory');
+	}
+
 	// Removes possible whitespace from both sides of the string.
 	let value = field.value.trim();
 
 	// Checks for empty fields.
-	if(value == '') {
+	if(field.value == '') {
 	  field.classList.add('mandatory');
+
+	  if(Chosen !== null) {
+	    Chosen.classList.add('mandatory');
+	  }
+
           alert(Joomla.JText._('COM_'+this.componentName.toUpperCase()+'_ALERT_MANDATORY_FIELD'));
 	  return false;
 	}
 
 	// Checks the value type.
-	if(fields[key] !== '' && !this.checkValueType(value, fields[key], extraType)) {
+	if(fields[key] !== '' && !this.checkValueType(field.value, fields[key], extraType)) {
 	  field.classList.add('mandatory');
+
+	  if(Chosen !== null) {
+	    Chosen.classList.add('mandatory');
+	  }
+
           alert(Joomla.JText._('COM_'+this.componentName.toUpperCase()+'_ALERT_VALUE_TYPE_NOT_VALID'));
 	  return false;
 	}
