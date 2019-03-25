@@ -37,21 +37,41 @@
       data = {'id':'', 'school_name':'', 'name':'', 'classrooms':[], 'level':'', 'certified':0, 'gender':'male'};
     }
 
+    // Element label.
+    let attribs = {'class':'item-space', 'id':'teacher-school-label-'+idNb};
+    $('#teacher-row-1-cell-1-'+idNb).append(GETTER.teacher.createElement('span', attribs));
+    $('#teacher-school-label-'+idNb).html('&nbsp;');
+
     // Creates the hidden input element to store the attribute id.
-    let attribs = {'type':'hidden', 'name':'teacher_school_id_'+idNb, 'id':'teacher-school-id-'+idNb, 'value':data.school_id};
+    attribs = {'type':'hidden', 'name':'teacher_school_id_'+idNb, 'id':'teacher-school-id-'+idNb, 'value':data.school_id};
     let elem = GETTER.teacher.createElement('input', attribs);
     $('#teacher-row-1-cell-1-'+idNb).append(elem);
     let url = $('#root-location').val()+'administrator/index.php?option=com_notebook&view=notes&layout=modal&tmpl=component&function=selectTeacherNoteItem&type=school&id_nb='+idNb;
     let button = GETTER.teacher.createButton('select', idNb, url);
     $('#teacher-row-1-cell-1-'+idNb).append(button);
 
+    // Element label.
+    attribs = {'title':Joomla.JText._('COM_NOTEBOOK_SCHOOL_LABEL'), 'class':'item-label', 'id':'teacher-schoolname-label-'+idNb};
+    $('#teacher-row-1-cell-2-'+idNb).append(GETTER.teacher.createElement('span', attribs));
+    $('#teacher-schoolname-label-'+idNb).text(Joomla.JText._('COM_NOTEBOOK_SCHOOL_LABEL'));
+
     attribs = {'type':'text', 'disabled':'disabled', 'id':'teacher-school-name-'+idNb, 'value':data.school_name};
     elem = GETTER.teacher.createElement('input', attribs);
     $('#teacher-row-1-cell-2-'+idNb).append(elem);
 
+    // Element label.
+    attribs = {'title':Joomla.JText._('COM_NOTEBOOK_NAME_LABEL'), 'class':'item-label', 'id':'teacher-name-label-'+idNb};
+    $('#teacher-row-1-cell-3-'+idNb).append(GETTER.teacher.createElement('span', attribs));
+    $('#teacher-name-label-'+idNb).text(Joomla.JText._('COM_NOTEBOOK_NAME_LABEL'));
+
     // Text input tag:
     attribs = {'type':'text', 'name':'teacher_name_'+idNb, 'id':'teacher-name-'+idNb, 'value':data.name};
     $('#teacher-row-1-cell-3-'+idNb).append(GETTER.teacher.createElement('input', attribs));
+
+    // Element label.
+    attribs = {'title':Joomla.JText._('COM_NOTEBOOK_LEVEL_LABEL'), 'class':'item-label', 'id':'teacher-level-label-'+idNb};
+    $('#teacher-row-2-cell-1-'+idNb).append(GETTER.teacher.createElement('span', attribs));
+    $('#teacher-level-label-'+idNb).text(Joomla.JText._('COM_NOTEBOOK_LEVEL_LABEL'));
 
     // Select tag:
     attribs = {'name':'teacher_level_'+idNb, 'id':'teacher-level-'+idNb};
@@ -75,6 +95,11 @@
     // Update the chosen plugin.
     $('#teacher-level-'+idNb).chosen();
 
+    // Element label.
+    attribs = {'title':Joomla.JText._('COM_NOTEBOOK_CERTIFIED_LABEL'), 'class':'item-label', 'id':'teacher-certified-label-'+idNb};
+    $('#teacher-row-2-cell-2-'+idNb).append(GETTER.teacher.createElement('span', attribs));
+    $('#teacher-certified-label-'+idNb).text(Joomla.JText._('COM_NOTEBOOK_CERTIFIED_LABEL'));
+
     // Checkbox tag:
     attribs = {'type':'checkbox', 'name':'teacher_certified_'+idNb, 'id':'teacher-certified-'+idNb, 'value':'certified'};
 
@@ -83,6 +108,11 @@
     }
 
     $('#teacher-row-2-cell-2-'+idNb).append(GETTER.teacher.createElement('input', attribs));
+
+    // Element label.
+    attribs = {'title':Joomla.JText._('COM_NOTEBOOK_CLASSROOMS_LABEL'), 'class':'item-label', 'id':'teacher-classrooms-label-'+idNb};
+    $('#teacher-row-2-cell-3-'+idNb).append(GETTER.teacher.createElement('span', attribs));
+    $('#teacher-classrooms-label-'+idNb).text(Joomla.JText._('COM_NOTEBOOK_CLASSROOMS_LABEL'));
 
     // Multiple Select tag:
     attribs = {'name':'teacher_classrooms_'+idNb+'[]', 'id':'teacher-classrooms-'+idNb, 'multiple':'true'};
@@ -105,6 +135,11 @@
     $('#teacher-classrooms-'+idNb).html(options);
     // Update the chosen plugin.
     $('#teacher-classrooms-'+idNb).chosen();
+
+    // Element label.
+    attribs = {'title':Joomla.JText._('COM_NOTEBOOK_GENDER_LABEL'), 'class':'item-label', 'id':'teacher-gender-label-'+idNb};
+    $('#teacher-row-2-cell-4-'+idNb).append(GETTER.teacher.createElement('span', attribs));
+    $('#teacher-gender-label-'+idNb).text(Joomla.JText._('COM_NOTEBOOK_GENDER_LABEL'));
 
     // Radio buttons:
     attribs = {'type':'radio', 'name':'teacher_gender_'+idNb, 'id':'teacher-gender-'+idNb, 'value':'male'};

@@ -124,12 +124,17 @@ Omkod.DynamicItem = class {
 
       for(let j = 0; j < this.rowsCells[i]; j++) {
 	cellNb = j + 1;
-	let attribs = {'id':this.itemType+'-row-'+rowNb+'-cell-'+cellNb+'-'+idNb, 'class':this.itemType+'-cells-row-'+rowNb};
+	let attribs = {'id':this.itemType+'-row-'+rowNb+'-cell-'+cellNb+'-'+idNb, 'class':this.itemType+'-cells-row-'+rowNb+' '+this.itemType+'-cell-'+cellNb+'-row-'+rowNb};
 	item.appendChild(this.createElement('div', attribs));
       }
 
       // Adds a button which removes the item.
       if(rowNb == 1) {
+	// Creates first an empty label.
+	let attribs = {'class':'item-space', 'id':this.itemType+'-delete-label-'+idNb};
+	document.getElementById(this.itemType+'-row-'+rowNb+'-cell-'+cellNb+'-'+idNb).appendChild(this.createElement('span', attribs));
+	document.getElementById(this.itemType+'-delete-label-'+idNb).innerHTML = '&nbsp;';
+        // Then adds the button.
 	document.getElementById(this.itemType+'-row-'+rowNb+'-cell-'+cellNb+'-'+idNb).appendChild(this.createButton('remove', idNb)); 
       }
 
@@ -254,7 +259,7 @@ Omkod.DynamicItem = class {
    * @return  void
   */
   itemReordering() {
-    // Collects all the item divs (ie: with a itemtype-item class) in the container.
+    // Collects all the item divs (ie: divs with a itemtype-item class) in the container.
     let divs = this.container.querySelectorAll('div.'+this.itemType+'-item');
     // Empties the id number list.
     this.idNbList = [];
@@ -303,14 +308,19 @@ Omkod.DynamicItem = class {
     let row = 1;
     let cell = this.rowsCells[0] - 1; 
 
+    // Creates first an empty label.
+    let attribs = {'class':'item-space', 'id':this.itemType+'-order-label-'+idNb};
+    document.getElementById(this.itemType+'-row-'+row+'-cell-'+cell+'-'+idNb).appendChild(this.createElement('span', attribs));
+    document.getElementById(this.itemType+'-order-label-'+idNb).innerHTML = '&nbsp;';
+
     // Creates the element in which the item order number is stored.
-    let attribs = {'type':'hidden', 'name':this.itemType+'_order_'+idNb, 'id':this.itemType+'-order-'+idNb};
+    attribs = {'type':'hidden', 'name':this.itemType+'_order_'+idNb, 'id':this.itemType+'-order-'+idNb};
     document.getElementById(this.itemType+'-row-'+row+'-cell-'+cell+'-'+idNb).appendChild(this.createElement('input', attribs));
 
     // Concatenates the function name allowing the item to go up or down in the item ordering. 
     let functionName = 'reverse'+this.itemTypeUpperCase+'Order';
     // Creates the link allowing the item to go down the item ordering.
-    attribs = {'href':'#', 'id':this.itemType+'-down-ordering-'+idNb, 'onclick':functionName+'(\'down\','+idNb+')', 'class':'down-ordering'};
+    attribs = {'href':'javascript:void(0);', 'id':this.itemType+'-down-ordering-'+idNb, 'onclick':functionName+'(\'down\','+idNb+')', 'class':'down-ordering'};
     let link = this.createElement('a', attribs);
     attribs = {'src':this.rootLocation+'media/com_'+this.componentName+'/images/arrow_down.png', 'title':'arrow down', 'height':16, 'width':16};
     link.appendChild(this.createElement('img', attribs));
@@ -321,7 +331,7 @@ Omkod.DynamicItem = class {
     document.getElementById(this.itemType+'-row-'+row+'-cell-'+cell+'-'+idNb).appendChild(this.createElement('input', attribs));
  
     // Creates the link allowing the item to go up the item ordering.
-    attribs = {'href':'#', 'id':this.itemType+'-up-ordering-'+idNb, 'onclick':functionName+'(\'up\','+idNb+')', 'class':'up-ordering'};
+    attribs = {'href':'javascript:void(0);', 'id':this.itemType+'-up-ordering-'+idNb, 'onclick':functionName+'(\'up\','+idNb+')', 'class':'up-ordering'};
     link = this.createElement('a', attribs);
     attribs = {'src':this.rootLocation+'media/com_'+this.componentName+'/images/arrow_up.png', 'title':'arrow up', 'height':16, 'width':16};
     link.appendChild(this.createElement('img', attribs));

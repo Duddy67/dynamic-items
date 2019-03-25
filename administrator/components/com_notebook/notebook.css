@@ -24,6 +24,15 @@
   /*border: 1px solid #ddd;*/
 }
 
+.teacher-cells-row-1 {
+  padding-bottom: 20px;
+}
+
+.teacher-cell-2-row-2,
+.teacher-cell-4-row-2 {
+  text-align: center;
+}
+
 .teacher-ordering {
   width: 20px;
   font-weight: bold;
@@ -44,3 +53,15 @@
   border: 1px solid #9d261d !important;
   background-color: #f2dede !important;
 }
+
+.item-label,
+.item-space {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.item-space {
+  display: block;
+}
+

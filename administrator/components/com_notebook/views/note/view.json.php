@@ -19,7 +19,7 @@ class NotebookViewNote extends JViewLegacy
     $model = $this->getModel();
     $results = array();
     $results = $model->getTeacher($noteId);
-    //file_put_contents('debog_file.txt', print_r($results, true)); 
+
     echo new JResponseJson($results);
   }
 }
