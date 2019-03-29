@@ -7,7 +7,7 @@
     //
     let rootLocation = $('#root-location').val();
     //
-    let props = {'component':'notebook', 'item':'teacher', 'ordering':true, 'rootLocation':rootLocation, 'rowsCells':[5,4], 'Chosen':true};
+    let props = {'component':'notebook', 'item':'teacher', 'ordering':true, 'rootLocation':rootLocation, 'rowsCells':[5,4], 'Chosen':true, 'nbItemsPerPage':3};
     const teacher = new Omkod.DynamicItem(props);
     //
     GETTER.teacher = teacher;

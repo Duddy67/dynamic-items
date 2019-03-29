@@ -9,6 +9,13 @@ Omkod.DynamicItem = class {
     this.rowsCells = props.rowsCells;
     this.rootLocation = props.rootLocation;
     this.Chosen = props.Chosen;
+
+    this.nbItemsPerPage = null;
+    if(props.nbItemsPerPage !== undefined) {
+      this.nbItemsPerPage = props.nbItemsPerPage;
+    }
+    this.nbPages = 1;
+
     // Initializes some utility variables
     this.idNbList = [];
     // Used to keep each id unique during the session (ie: not reuse the id of a deleted item).
@@ -26,6 +33,14 @@ Omkod.DynamicItem = class {
     // Inserts the add button.
     let button = this.createButton('add');
     this.addButtonContainer.appendChild(button);
+
+    //
+    if(this.nbItemsPerPage !== null) {
+      attribs = {'id':this.itemType+'-pagination', 'class':this.itemType+'-pagination'};
+      this.pagination = this.createElement('div', attribs);
+      document.getElementById(this.itemType).appendChild(this.pagination); 
+    }
+
 
     return this;
   }
@@ -92,12 +107,17 @@ Omkod.DynamicItem = class {
 
     if(this.ordering) {
       // N.B:  No need to add the new item id number to the list as it is updated 
-      //       in the itemReordering function.
+      //       in the itemReordering function. The item pagination is reset as well.
       this.setItemOrdering(idNb);
     }
     else {
       // Adds the new item id number to the list.
       this.idNbList.push(idNb);
+
+      // Reset the item pagination if required.
+      if(this.nbItemsPerPage !== null) {
+	this.setItemPagination();
+      }
     }
 
     // Concatenates the callback function name.
@@ -165,7 +185,7 @@ Omkod.DynamicItem = class {
 
     if(this.ordering) {
       // N.B:  No need to remove the item id number from the list as it is updated 
-      //       in the itemReordering function.
+      //       in the itemReordering function. The item pagination is reset as well.
       this.itemReordering();
     }
     else {
@@ -174,6 +194,11 @@ Omkod.DynamicItem = class {
 	if(this.idNbList[i] == idNb) {
 	  this.idNbList.splice(i, 1); 
 	}
+      }
+
+      // Reset the item pagination if required.
+      if(this.nbItemsPerPage !== null) {
+	this.setItemPagination();
       }
     }
   }
@@ -292,6 +317,11 @@ Omkod.DynamicItem = class {
 	document.getElementById(this.itemType+'-down-ordering-'+idNb).style.display = 'none';
 	document.getElementById(this.itemType+'-ordering-'+idNb).classList.add('last-item');
       }
+    }
+
+    // Reset the item pagination if required.
+    if(this.nbItemsPerPage !== null) {
+      this.setItemPagination();
     }
   }
 
@@ -500,5 +530,34 @@ Omkod.DynamicItem = class {
     }
 
     return regex.test(value);
+  }
+
+
+  // TODO:
+  setItemPagination() {
+    // Loops through the item id number order.
+    for(let i = 0; i < this.idNbList.length; i++) {
+      let pageNb = 1;
+
+      if((i + 1) > this.nbItemsPerPage) {
+	let result = (i + 1) / this.nbItemsPerPage;
+	pageNb = Math.ceil(result);
+      }
+
+      this.nbPages = pageNb;
+
+      let item = document.getElementById(this.itemType+'-item-'+this.idNbList[i]);
+      let classes = item.className.split(' ');
+      //alert(document.getElementById(this.itemType+'-item-'+this.idNbList[i]).className);
+      for(let j = 0; j < classes.length; j++) {
+
+	//alert(classes[j]);
+	if(classes[j].substring(0, this.itemType.length + 6) === this.itemType+'-page-') {
+	  item.classList.remove(classes[j]);
+	}
+
+	item.classList.add(this.itemType+'-page-'+pageNb);
+      }
+    }
   }
 }
