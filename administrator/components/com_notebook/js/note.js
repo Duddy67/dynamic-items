@@ -159,12 +159,18 @@
     $('#teacher-row-2-cell-4-'+idNb).append(GETTER.teacher.createElement('input', attribs));
   }
 
+  /** Callback functions **/
+
   reverseTeacherOrder = function(direction, idNb) {
     GETTER.teacher.reverseOrder(direction, idNb);
   }
 
   selectTeacherNoteItem = function(id, name, idNb, type) {
     GETTER.teacher.selectItem(id, name, idNb, type, true);
+  }
+
+  browsingTeacherPages = function(pageNb) {
+    GETTER.teacher.updatePagination(pageNb);
   }
 
   validateFields = function(e) {

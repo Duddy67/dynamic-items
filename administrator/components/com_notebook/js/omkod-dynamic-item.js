@@ -14,7 +14,10 @@ Omkod.DynamicItem = class {
     if(props.nbItemsPerPage !== undefined) {
       this.nbItemsPerPage = props.nbItemsPerPage;
     }
-    this.nbPages = 1;
+
+    this.totalPages = 1;
+    this.currentPageNb = 1;
+    this.toLastPage = false;
 
     // Initializes some utility variables
     this.idNbList = [];
@@ -39,8 +42,10 @@ Omkod.DynamicItem = class {
       attribs = {'id':this.itemType+'-pagination', 'class':this.itemType+'-pagination'};
       this.pagination = this.createElement('div', attribs);
       document.getElementById(this.itemType).appendChild(this.pagination); 
-    }
 
+      attribs = {'id':this.itemType+'-pagination-browser', 'class':this.itemType+'-pagination-browser'};
+      document.getElementById(this.itemType+'-pagination').appendChild(this.createElement('table', attribs)); 
+    }
 
     return this;
   }
@@ -99,6 +104,10 @@ Omkod.DynamicItem = class {
       idNb = this.getNewIdNumber();
     }
 
+    if(data === undefined) {
+      this.toLastPage = true;
+    }
+
     // Creates the item div then its inner structure.
     let attribs = {'id':this.itemType+'-item-'+idNb, 'class':this.itemType+'-item'};
     let item = this.createElement('div', attribs);
@@ -116,7 +125,7 @@ Omkod.DynamicItem = class {
 
       // Reset the item pagination if required.
       if(this.nbItemsPerPage !== null) {
-	this.setItemPagination();
+	this.updatePagination(this.currentPageNb);
       }
     }
 
@@ -198,7 +207,7 @@ Omkod.DynamicItem = class {
 
       // Reset the item pagination if required.
       if(this.nbItemsPerPage !== null) {
-	this.setItemPagination();
+	this.updatePagination(this.currentPageNb);
       }
     }
   }
@@ -321,7 +330,7 @@ Omkod.DynamicItem = class {
 
     // Reset the item pagination if required.
     if(this.nbItemsPerPage !== null) {
-      this.setItemPagination();
+      this.updatePagination(this.currentPageNb);
     }
   }
 
@@ -532,9 +541,28 @@ Omkod.DynamicItem = class {
     return regex.test(value);
   }
 
+  /**
+   * Defines the items to display according to the given page number and the pagination parameters.
+   *
+   * @param   integer   activePageNb   The page to display in the item list.
+   *
+   * @return  void
+  */
+  updatePagination(activePageNb) {
+    // Updates the current page number.
+    this.currentPageNb = activePageNb;
 
-  // TODO:
-  setItemPagination() {
+    // Computes the total number of pages.
+    this.totalPages = Math.ceil(this.idNbList.length / this.nbItemsPerPage);
+
+    this.pagination.style.display = 'block';
+
+    if(this.toLastPage) {
+      // A new item has been added to the end of the list. Displays the last item page.
+      this.currentPageNb = this.totalPages;
+      this.toLastPage = false;
+    }
+
     // Loops through the item id number order.
     for(let i = 0; i < this.idNbList.length; i++) {
       let pageNb = 1;
@@ -544,20 +572,78 @@ Omkod.DynamicItem = class {
 	pageNb = Math.ceil(result);
       }
 
-      this.nbPages = pageNb;
-
       let item = document.getElementById(this.itemType+'-item-'+this.idNbList[i]);
       let classes = item.className.split(' ');
-      //alert(document.getElementById(this.itemType+'-item-'+this.idNbList[i]).className);
+
       for(let j = 0; j < classes.length; j++) {
 
-	//alert(classes[j]);
-	if(classes[j].substring(0, this.itemType.length + 6) === this.itemType+'-page-') {
+	if(classes[j].substring(0, this.itemType.length + 20) === this.itemType+'-pagination-inactive') {
 	  item.classList.remove(classes[j]);
 	}
 
-	item.classList.add(this.itemType+'-page-'+pageNb);
+	if(pageNb != this.currentPageNb && this.totalPages > 1) {
+	  item.classList.add(this.itemType+'-pagination-inactive');
+	}
       }
     }
+
+    if(this.totalPages < this.currentPageNb) {
+      this.currentPageNb = this.totalPages;
+    }
+
+    if(this.totalPages == 1) {
+      // No pagination is needed if there's just one page.
+      this.pagination.style.display = 'none';
+      return;
+    }
+
+    this.updatePaginationBrowser();
+  }
+
+  /**
+   * Builds the pagination browser according to the pagination parameters.
+   *
+   * @return  void
+  */
+  updatePaginationBrowser() {
+    let beginning = Joomla.JText._('COM_'+this.componentName.toUpperCase()+'_PAGINATION_BEGINNING');
+    let previous = Joomla.JText._('COM_'+this.componentName.toUpperCase()+'_PAGINATION_PREVIOUS');
+
+    if(this.currentPageNb > 1) {
+      beginning = '<a href="javascript:void(0);" onclick="browsing'+this.itemTypeUpperCase+'Pages(1);">'+beginning+'</a>';
+      let previousPage = this.currentPageNb - 1;
+      previous = '<a href="javascript:void(0);" onclick="browsing'+this.itemTypeUpperCase+'Pages('+previousPage+');">'+previous+'</a>';
+    }
+
+    let browser = '<td>'+beginning+'</td><td>'+previous+'</td>';
+
+    let next = Joomla.JText._('COM_'+this.componentName.toUpperCase()+'_PAGINATION_NEXT');
+    let end = Joomla.JText._('COM_'+this.componentName.toUpperCase()+'_PAGINATION_END');
+
+    if(this.currentPageNb < this.totalPages) {
+      let nextPage = this.currentPageNb + 1;
+      next = '<a href="javascript:void(0);" onclick="browsing'+this.itemTypeUpperCase+'Pages('+nextPage+');">'+next+'</a>';
+      end = '<a href="javascript:void(0);" onclick="browsing'+this.itemTypeUpperCase+'Pages('+this.totalPages+');">'+end+'</a>';
+    }
+
+    for(let i = 0; i < this.totalPages; i++) {
+      let pageNb = i + 1;
+
+      if(pageNb == this.currentPageNb) {
+	browser += '<td>'+pageNb+'</td>';
+      }
+      else {
+	browser += '<td><a href="javascript:void(0);" onclick="browsing'+this.itemTypeUpperCase+'Pages('+pageNb+');">'+pageNb+'</a></td>';
+      }
+    }
+
+    browser += '<td>'+next+'</td><td>'+end+'</td>';
+
+    if(document.getElementById(this.itemType+'-pagination-browser').rows.length > 0) {
+      document.getElementById(this.itemType+'-pagination-browser').deleteRow(0);
+    }
+
+    let row = document.getElementById(this.itemType+'-pagination-browser').insertRow(0)
+    row.innerHTML = browser;
   }
 }

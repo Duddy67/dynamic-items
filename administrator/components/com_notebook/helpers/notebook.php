@@ -93,6 +93,10 @@ class NotebookHelper
     JText::script('COM_NOTEBOOK_CERTIFIED_LABEL');
     JText::script('COM_NOTEBOOK_CLASSROOMS_LABEL');
     JText::script('COM_NOTEBOOK_GENDER_LABEL');
+    JText::script('COM_NOTEBOOK_PAGINATION_BEGINNING');
+    JText::script('COM_NOTEBOOK_PAGINATION_PREVIOUS');
+    JText::script('COM_NOTEBOOK_PAGINATION_NEXT');
+    JText::script('COM_NOTEBOOK_PAGINATION_END');
 
     return;
   }
