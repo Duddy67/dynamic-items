@@ -10,6 +10,7 @@ Omkod.DynamicItem = class {
     this.rootLocation = props.rootLocation;
     this.Chosen = props.Chosen;
 
+    // Pagination parameters.
     this.nbItemsPerPage = null;
     if(props.nbItemsPerPage !== undefined) {
       this.nbItemsPerPage = props.nbItemsPerPage;
@@ -37,7 +38,7 @@ Omkod.DynamicItem = class {
     let button = this.createButton('add');
     this.addButtonContainer.appendChild(button);
 
-    //
+    // Builds the pagination area.
     if(this.nbItemsPerPage !== null) {
       attribs = {'id':this.itemType+'-pagination', 'class':this.itemType+'-pagination'};
       this.pagination = this.createElement('div', attribs);
@@ -95,6 +96,7 @@ Omkod.DynamicItem = class {
   createItem(data) {
     // Sets the id number for the item.
     let idNb = null;
+
     if(data !== undefined && data.id_nb !== undefined) {
       // Uses the given id number.
       idNb = data.id_nb;
@@ -104,7 +106,9 @@ Omkod.DynamicItem = class {
       idNb = this.getNewIdNumber();
     }
 
+    // Means that a new item has been created from the "Add" button.
     if(data === undefined) {
+      // Displays the last page to show the newly created item. 
       this.toLastPage = true;
     }
 
@@ -552,14 +556,16 @@ Omkod.DynamicItem = class {
     // Updates the current page number.
     this.currentPageNb = activePageNb;
 
-    // Computes the total number of pages.
+    // Computes the total number of pages from the id list.
     this.totalPages = Math.ceil(this.idNbList.length / this.nbItemsPerPage);
 
     this.pagination.style.display = 'block';
 
-    if(this.toLastPage) {
-      // A new item has been added to the end of the list. Displays the last item page.
+    // A new item has been added to the end of the list OR the only item of the current 
+    // page has been deleted. In both cases the current last item page is displayed.
+    if(this.toLastPage || activePageNb > this.totalPages) {
       this.currentPageNb = this.totalPages;
+      // Reset the flag.
       this.toLastPage = false;
     }
 
@@ -567,32 +573,38 @@ Omkod.DynamicItem = class {
     for(let i = 0; i < this.idNbList.length; i++) {
       let pageNb = 1;
 
+      // Computes the page number according to the number of items per page.
       if((i + 1) > this.nbItemsPerPage) {
 	let result = (i + 1) / this.nbItemsPerPage;
 	pageNb = Math.ceil(result);
       }
 
+      // Gets the class names of the item.
       let item = document.getElementById(this.itemType+'-item-'+this.idNbList[i]);
       let classes = item.className.split(' ');
 
+      // Loops through the class names.
       for(let j = 0; j < classes.length; j++) {
-
+        // Checks and removes the possible pagination class.
 	if(classes[j].substring(0, this.itemType.length + 20) === this.itemType+'-pagination-inactive') {
 	  item.classList.remove(classes[j]);
 	}
 
-	if(pageNb != this.currentPageNb && this.totalPages > 1) {
+	// Hides the items which are not part of the current page. 
+	if(pageNb != this.currentPageNb) {
 	  item.classList.add(this.itemType+'-pagination-inactive');
 	}
       }
     }
 
+    // The only item of the current page has been deleted.
     if(this.totalPages < this.currentPageNb) {
+      // Updates the current page number.
       this.currentPageNb = this.totalPages;
     }
 
-    if(this.totalPages == 1) {
-      // No pagination is needed if there's just one page.
+    if(this.totalPages < 2) {
+      // No pagination is needed if there's just one or no page.
       this.pagination.style.display = 'none';
       return;
     }
