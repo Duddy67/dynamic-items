@@ -5,9 +5,9 @@ Omkod.DynamicItem = class {
     this.componentName = props.component;
     this.itemType = props.item;
     this.itemTypeUpperCase = this.itemType.slice(0,1).toUpperCase() + this.itemType.slice(1);
-    this.ordering = props.ordering;
     this.rowsCells = props.rowsCells;
     this.rootLocation = props.rootLocation;
+    this.ordering = props.ordering;
     this.Chosen = props.Chosen;
 
     // Pagination parameters.
@@ -108,7 +108,7 @@ Omkod.DynamicItem = class {
 
     // Means that a new item has been created from the "Add" button.
     if(data === undefined) {
-      // Displays the last page to show the newly created item. 
+      // Displays the last page to show the newly created item. (used for pagination). 
       this.toLastPage = true;
     }
 
@@ -621,6 +621,7 @@ Omkod.DynamicItem = class {
     let beginning = Joomla.JText._('COM_'+this.componentName.toUpperCase()+'_PAGINATION_BEGINNING');
     let previous = Joomla.JText._('COM_'+this.componentName.toUpperCase()+'_PAGINATION_PREVIOUS');
 
+    // Sets the 'beginning' and 'previous' links 
     if(this.currentPageNb > 1) {
       beginning = '<a href="javascript:void(0);" onclick="browsing'+this.itemTypeUpperCase+'Pages(1);">'+beginning+'</a>';
       let previousPage = this.currentPageNb - 1;
@@ -632,12 +633,14 @@ Omkod.DynamicItem = class {
     let next = Joomla.JText._('COM_'+this.componentName.toUpperCase()+'_PAGINATION_NEXT');
     let end = Joomla.JText._('COM_'+this.componentName.toUpperCase()+'_PAGINATION_END');
 
+    // Sets the 'next' and 'end' links 
     if(this.currentPageNb < this.totalPages) {
       let nextPage = this.currentPageNb + 1;
       next = '<a href="javascript:void(0);" onclick="browsing'+this.itemTypeUpperCase+'Pages('+nextPage+');">'+next+'</a>';
       end = '<a href="javascript:void(0);" onclick="browsing'+this.itemTypeUpperCase+'Pages('+this.totalPages+');">'+end+'</a>';
     }
 
+    // Sets the page links 
     for(let i = 0; i < this.totalPages; i++) {
       let pageNb = i + 1;
 
@@ -651,10 +654,12 @@ Omkod.DynamicItem = class {
 
     browser += '<td>'+next+'</td><td>'+end+'</td>';
 
+    // Deletes the previous table row (if any).
     if(document.getElementById(this.itemType+'-pagination-browser').rows.length > 0) {
       document.getElementById(this.itemType+'-pagination-browser').deleteRow(0);
     }
 
+    // Inserts the new browsing links.
     let row = document.getElementById(this.itemType+'-pagination-browser').insertRow(0)
     row.innerHTML = browser;
   }

@@ -1,20 +1,23 @@
 (function($) {
-  // 
+  // A global variable to store then access the dynamical item objects. 
   const GETTER = {};
 
   // Run a function when the page is fully loaded including graphics.
   $(window).load(function() {
-    //
+    // The input element containing the root location.
     let rootLocation = $('#root-location').val();
-    //
+    // Sets the Teacher object proprieties.
     let props = {'component':'notebook', 'item':'teacher', 'ordering':true, 'rootLocation':rootLocation, 'rowsCells':[5,4], 'Chosen':true, 'nbItemsPerPage':3};
+
     const teacher = new Omkod.DynamicItem(props);
-    //
+    // Stores the newly created object.
     GETTER.teacher = teacher;
+    // Sets the validating function. 
     $('#note-form').submit( function(e) { validateFields(e); });
 
     let noteId = $('#jform_id').val();
 
+    // Prepares then run the Ajax query.
     const ajax = new Omkod.Ajax();
     let params = {'method':'GET', 'dataType':'json', 'indicateFormat':true, 'async':true};
     let data = {'note_id':noteId};
@@ -30,6 +33,19 @@
       alert('Error: '+result.message);
     }
   }
+
+  validateFields = function(e) {
+    let task = document.getElementsByName('task');
+    let fields = {'school-name':'', 'level':'', 'name':''}; 
+
+    if(task[0].value != 'note.cancel' && !GETTER.teacher.validateFields(fields)) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+  }
+
+  /** Callback functions **/
 
   populateTeacherItem = function(idNb, data) {
     // Defines the default field values.
@@ -159,30 +175,19 @@
     $('#teacher-row-2-cell-4-'+idNb).append(GETTER.teacher.createElement('input', attribs));
   }
 
-  /** Callback functions **/
-
   reverseTeacherOrder = function(direction, idNb) {
+    // Optional code...
     GETTER.teacher.reverseOrder(direction, idNb);
   }
 
   selectTeacherNoteItem = function(id, name, idNb, type) {
+    // Optional code...
     GETTER.teacher.selectItem(id, name, idNb, type, true);
   }
 
   browsingTeacherPages = function(pageNb) {
+    // Optional code...
     GETTER.teacher.updatePagination(pageNb);
   }
-
-  validateFields = function(e) {
-    let task = document.getElementsByName('task');
-    let fields = {'school-name':'', 'level':'', 'name':''}; 
-
-    if(task[0].value != 'note.cancel' && !GETTER.teacher.validateFields(fields)) {
-      e.preventDefault();
-      e.stopPropagation();
-      return false;
-    }
-  }
-
 })(jQuery);
 
