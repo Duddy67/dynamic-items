@@ -56,7 +56,7 @@ class plgContentNotebook extends JPlugin
           $schoolId = (int)$this->post['teacher_school_id_'.$teacherNb];
           $name = $this->post['teacher_name_'.$teacherNb];
           $level = $this->post['teacher_level_'.$teacherNb];
-          $order = $this->post['teacher_order_'.$teacherNb];
+          $ordering = $this->post['teacher_ordering_'.$teacherNb];
           $certified = (int)isset($this->post['teacher_certified_'.$teacherNb]);
 	  $classRooms = '[]';
           $gender = $this->post['teacher_gender_'.$teacherNb];
@@ -65,7 +65,7 @@ class plgContentNotebook extends JPlugin
 	    $classRooms = json_encode($this->post['teacher_classrooms_'.$teacherNb]);
 	  }
 
-	  $values[] = $data->id.','.$schoolId.','.$db->Quote($name).','.$db->Quote($level).','.$db->Quote($classRooms).','.$certified.','.$db->Quote($gender).','.$order;
+	  $values[] = $data->id.','.$schoolId.','.$db->Quote($name).','.$db->Quote($level).','.$db->Quote($classRooms).','.$certified.','.$db->Quote($gender).','.$ordering;
 	}
       }
 

@@ -33,7 +33,7 @@
   text-align: center;
 }
 
-.teacher-ordering {
+.teacher-order-number {
   width: 20px;
   font-weight: bold;
   text-align: center;
@@ -67,5 +67,24 @@
 
 .teacher-pagination-inactive {
   display: none;
+}
+
+.teacher-pagination {
+}
+
+.teacher-pagination-browser {
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.teacher-pagination-browser .current-page-number,
+.teacher-pagination-browser .page-number {
+  border: 1px solid #ddd;
+}
+
+.teacher-pagination-browser td {
+  padding: 5px;
+  margin: 5px;
 }
 

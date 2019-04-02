@@ -304,31 +304,31 @@ Omkod.DynamicItem = class {
 
     // Loops through the item divs.
     for(let i = 0; i < divs.length; i++) {
-      let order = i + 1; 
+      let ordering = i + 1; 
       // Extracts the id number of the item from the end of its id value and convert it into an integer.
       let idNb = parseInt(divs[i].id.replace(/.+-(\d+)$/, '$1'));
-      // Updates the order of the id number. 
+      // Updates the ordering of the id number. 
       this.idNbList.push(idNb);
 
-      // Updates the item order.
-      document.getElementById(this.itemType+'-order-'+idNb).value = order;
-      document.getElementById(this.itemType+'-ordering-'+idNb).value = order;
+      // Updates the item ordering.
+      document.getElementById(this.itemType+'-ordering-'+idNb).value = ordering;
+      document.getElementById(this.itemType+'-order-number-'+idNb).value = ordering;
       // Displays the up/down links of the item. 
       document.getElementById(this.itemType+'-up-ordering-'+idNb).style.display = 'inline';
       document.getElementById(this.itemType+'-down-ordering-'+idNb).style.display = 'inline';
       // Resets first and last item classes.
-      document.getElementById(this.itemType+'-ordering-'+idNb).classList.remove('first-item', 'last-item');
+      document.getElementById(this.itemType+'-order-number-'+idNb).classList.remove('first-item', 'last-item');
 
-      if(order == 1) {
+      if(ordering == 1) {
 	// The first item cannot go any higher.
 	document.getElementById(this.itemType+'-up-ordering-'+idNb).style.display = 'none';
-	document.getElementById(this.itemType+'-ordering-'+idNb).classList.add('first-item');
+	document.getElementById(this.itemType+'-order-number-'+idNb).classList.add('first-item');
       }
 
-      if(order == divs.length) {
+      if(ordering == divs.length) {
 	// The last item cannot go any lower.
 	document.getElementById(this.itemType+'-down-ordering-'+idNb).style.display = 'none';
-	document.getElementById(this.itemType+'-ordering-'+idNb).classList.add('last-item');
+	document.getElementById(this.itemType+'-order-number-'+idNb).classList.add('last-item');
       }
     }
 
@@ -352,12 +352,12 @@ Omkod.DynamicItem = class {
     let cell = this.rowsCells[0] - 1; 
 
     // Creates first an empty label.
-    let attribs = {'class':'item-space', 'id':this.itemType+'-order-label-'+idNb};
+    let attribs = {'class':'item-space', 'id':this.itemType+'-ordering-label-'+idNb};
     document.getElementById(this.itemType+'-row-'+row+'-cell-'+cell+'-'+idNb).appendChild(this.createElement('span', attribs));
-    document.getElementById(this.itemType+'-order-label-'+idNb).innerHTML = '&nbsp;';
+    document.getElementById(this.itemType+'-ordering-label-'+idNb).innerHTML = '&nbsp;';
 
-    // Creates the element in which the item order number is stored.
-    attribs = {'type':'hidden', 'name':this.itemType+'_order_'+idNb, 'id':this.itemType+'-order-'+idNb};
+    // Creates the element in which the item ordering number is stored.
+    attribs = {'type':'hidden', 'name':this.itemType+'_ordering_'+idNb, 'id':this.itemType+'-ordering-'+idNb};
     document.getElementById(this.itemType+'-row-'+row+'-cell-'+cell+'-'+idNb).appendChild(this.createElement('input', attribs));
 
     // Concatenates the function name allowing the item to go up or down in the item ordering. 
@@ -370,7 +370,7 @@ Omkod.DynamicItem = class {
     document.getElementById(this.itemType+'-row-'+row+'-cell-'+cell+'-'+idNb).appendChild(link);
 
     // Creates fake element to display the order number. 
-    attribs = {'type':'text', 'disabled':'disabled', 'id':this.itemType+'-ordering-'+idNb, 'class':this.itemType+'-ordering'};
+    attribs = {'type':'text', 'disabled':'disabled', 'id':this.itemType+'-order-number-'+idNb, 'class':this.itemType+'-order-number'};
     document.getElementById(this.itemType+'-row-'+row+'-cell-'+cell+'-'+idNb).appendChild(this.createElement('input', attribs));
  
     // Creates the link allowing the item to go up the item ordering.
@@ -569,7 +569,7 @@ Omkod.DynamicItem = class {
       this.toLastPage = false;
     }
 
-    // Loops through the item id number order.
+    // Loops through the item id number ordering.
     for(let i = 0; i < this.idNbList.length; i++) {
       let pageNb = 1;
 
@@ -645,10 +645,10 @@ Omkod.DynamicItem = class {
       let pageNb = i + 1;
 
       if(pageNb == this.currentPageNb) {
-	browser += '<td>'+pageNb+'</td>';
+	browser += '<td class="current-page-number">'+pageNb+'</td>';
       }
       else {
-	browser += '<td><a href="javascript:void(0);" onclick="browsing'+this.itemTypeUpperCase+'Pages('+pageNb+');">'+pageNb+'</a></td>';
+	browser += '<td class="page-number"><a href="javascript:void(0);" onclick="browsing'+this.itemTypeUpperCase+'Pages('+pageNb+');">'+pageNb+'</a></td>';
       }
     }
 
