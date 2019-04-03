@@ -20,7 +20,10 @@
     // Prepares then run the Ajax query.
     const ajax = new Omkod.Ajax();
     let params = {'method':'GET', 'dataType':'json', 'indicateFormat':true, 'async':true};
-    let data = {'note_id':noteId};
+    // Gets the form security token.
+    let token = jQuery('#token').attr('name');
+    // N.B: Invokes first the ajax() function in the global controller to check the token.
+    let data = {[token]:1, 'task':'ajax', 'note_id':noteId};
     ajax.prepare(params, data);
     ajax.process(getAjaxResult);
   });

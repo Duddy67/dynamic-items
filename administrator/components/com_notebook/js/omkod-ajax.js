@@ -39,6 +39,7 @@ Omkod.Ajax = class {
     }
 
     if(this.params.indicateFormat) {
+      // N.B: Tells Joomla to use the appropriate view file (eg: view.json.php). 
       url = url+'&format='+this.params.dataType;
     }
 
