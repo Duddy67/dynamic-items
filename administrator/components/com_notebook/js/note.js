@@ -6,7 +6,7 @@
   $(window).load(function() {
     // The input element containing the root location.
     let rootLocation = $('#root-location').val();
-    // Sets the Teacher object proprieties.
+    // Sets the dynamic item properties.
     let props = {'component':'notebook', 'item':'teacher', 'ordering':true, 'rootLocation':rootLocation, 'rowsCells':[5,4], 'Chosen':true, 'nbItemsPerPage':3};
 
     const teacher = new Omkod.DynamicItem(props);
@@ -61,11 +61,11 @@
     $('#teacher-row-1-cell-1-'+idNb).append(GETTER.teacher.createElement('span', attribs));
     $('#teacher-school-label-'+idNb).html('&nbsp;');
 
-    // Creates the hidden input element to store the attribute id.
+    // Creates the hidden input element to store the id of the selected school item in the modal window.
     attribs = {'type':'hidden', 'name':'teacher_school_id_'+idNb, 'id':'teacher-school-id-'+idNb, 'value':data.school_id};
     let elem = GETTER.teacher.createElement('input', attribs);
     $('#teacher-row-1-cell-1-'+idNb).append(elem);
-    let url = $('#root-location').val()+'administrator/index.php?option=com_notebook&view=notes&layout=modal&tmpl=component&function=selectTeacherNoteItem&type=school&id_nb='+idNb;
+    let url = $('#root-location').val()+'administrator/index.php?option=com_notebook&view=notes&layout=modal&tmpl=component&function=selectSchoolItem&dynamic_item_type=teacher&id_nb='+idNb;
     let button = GETTER.teacher.createButton('select', idNb, url);
     $('#teacher-row-1-cell-1-'+idNb).append(button);
 
@@ -178,19 +178,19 @@
     $('#teacher-row-2-cell-4-'+idNb).append(GETTER.teacher.createElement('input', attribs));
   }
 
-  reverseTeacherOrder = function(direction, idNb) {
-    // Optional code...
-    GETTER.teacher.reverseOrder(direction, idNb);
+  reverseOrder = function(direction, idNb, dynamicItemType) {
+    // Calls the parent function from the corresponding instance.
+    GETTER[dynamicItemType].reverseOrder(direction, idNb);
   }
 
-  selectTeacherNoteItem = function(id, name, idNb, type) {
-    // Optional code...
-    GETTER.teacher.selectItem(id, name, idNb, type, true);
+  selectSchoolItem = function(id, name, idNb, dynamicItemType) {
+    // Calls the parent function from the corresponding instance.
+    GETTER[dynamicItemType].selectItem(id, name, idNb, 'school', true);
   }
 
-  browsingTeacherPages = function(pageNb) {
-    // Optional code...
-    GETTER.teacher.updatePagination(pageNb);
+  browsingPages = function(pageNb, dynamicItemType) {
+    // Calls the parent function from the corresponding instance.
+    GETTER[dynamicItemType].updatePagination(pageNb);
   }
 })(jQuery);
 
