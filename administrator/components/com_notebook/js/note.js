@@ -42,6 +42,9 @@
     let fields = {'school-name':'', 'level':'', 'name':''}; 
 
     if(task[0].value != 'note.cancel' && !GETTER.teacher.validateFields(fields)) {
+      // Shows the dynamic item tab.
+      $('.nav-tabs a[href="#teachers"]').tab('show');
+
       e.preventDefault();
       e.stopPropagation();
       return false;
