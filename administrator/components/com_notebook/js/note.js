@@ -9,9 +9,8 @@
     // Sets the dynamic item properties.
     let props = {'component':'notebook', 'item':'teacher', 'ordering':true, 'rootLocation':rootLocation, 'rowsCells':[5,4], 'Chosen':true, 'nbItemsPerPage':3};
 
-    const teacher = new Omkod.DynamicItem(props);
     // Stores the newly created object.
-    GETTER.teacher = teacher;
+    GETTER.teacher = new Omkod.DynamicItem(props);
     // Sets the validating function. 
     $('#note-form').submit( function(e) { validateFields(e); });
 
