@@ -12,7 +12,8 @@
 .teacher-item {
   width: 100%;
   border-bottom: 1px solid #ddd;
-  margin-bottom: 20px;
+  padding-top: 10px;
+  padding-left: 8px;
 }
 
 .teacher-cells-row-1,
@@ -87,4 +88,13 @@
   padding: 5px;
   margin: 5px;
 }
+
+div[class$='-odd'] {
+  background-color: #f1f7ff;
+}
+
+div[class$='-even'] {
+  background-color: #fff;
+}
+
 
