@@ -222,6 +222,9 @@ Omkod.DynamicItem = class {
     }
 
     this.setOddEven();
+
+    // Calls a callback function to execute possible tasks after the item deletion.
+    window['afterRemoveItem'](idNb, this.itemType);
   }
 
   /**
@@ -436,6 +439,8 @@ Omkod.DynamicItem = class {
     }
 
     this.itemReordering();
+    // The "odd" and "even" classes need to be reset.
+    this.setOddEven();
   }
 
   /**

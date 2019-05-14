@@ -194,5 +194,10 @@
     // Calls the parent function from the corresponding instance.
     GETTER[dynamicItemType].updatePagination(pageNb);
   }
+
+  afterRemoveItem = function(idNb, dynamicItemType) {
+    // Execute here possible tasks after the item deletion.
+  }
+
 })(jQuery);
 
