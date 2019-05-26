@@ -163,7 +163,7 @@
     $('#teacher-gender-label-'+idNb).text(Joomla.JText._('COM_NOTEBOOK_GENDER_LABEL'));
 
     // Radio buttons:
-    attribs = {'type':'radio', 'name':'teacher_gender_'+idNb, 'id':'teacher-gender-'+idNb, 'value':'male'};
+    attribs = {'type':'radio', 'name':'teacher_gender_'+idNb, 'id':'teacher-gender-male-'+idNb, 'value':'male'};
 
     if(data.gender == 'male') {
       attribs.checked = 'checked';
@@ -171,7 +171,7 @@
 
     $('#teacher-row-2-cell-4-'+idNb).append(GETTER.teacher.createElement('input', attribs));
 
-    attribs = {'type':'radio', 'name':'teacher_gender_'+idNb, 'id':'teacher-gender-'+idNb, 'value':'female'};
+    attribs = {'type':'radio', 'name':'teacher_gender_'+idNb, 'id':'teacher-gender-female-'+idNb, 'value':'female'};
 
     if(data.gender == 'female') {
       attribs.checked = 'checked';
@@ -193,6 +193,10 @@
   browsingPages = function(pageNb, dynamicItemType) {
     // Calls the parent function from the corresponding instance.
     GETTER[dynamicItemType].updatePagination(pageNb);
+  }
+
+  beforeRemoveItem = function(idNb, dynamicItemType) {
+    // Execute here possible tasks before the item deletion.
   }
 
   afterRemoveItem = function(idNb, dynamicItemType) {
