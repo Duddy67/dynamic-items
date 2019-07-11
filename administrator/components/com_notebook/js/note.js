@@ -7,7 +7,7 @@
     // The input element containing the root location.
     let rootLocation = $('#root-location').val();
     // Sets the dynamic item properties.
-    let props = {'component':'notebook', 'item':'teacher', 'ordering':true, 'rootLocation':rootLocation, 'rowsCells':[5,4], 'Chosen':true, 'nbItemsPerPage':3};
+    let props = {'component':'notebook', 'item':'teacher', 'ordering':true, 'rootLocation':rootLocation, 'rowsCells':[5,5], 'Chosen':true, 'nbItemsPerPage':3};
 
     // Stores the newly created object.
     GETTER.teacher = new Omkod.DynamicItem(props);
@@ -55,7 +55,7 @@
   populateTeacherItem = function(idNb, data) {
     // Defines the default field values.
     if(data === undefined) {
-      data = {'id':'', 'school_name':'', 'name':'', 'classrooms':[], 'level':'', 'certified':0, 'gender':'male'};
+      data = {'id':'', 'school_name':'', 'name':'', 'classrooms':[], 'level':'', 'certified':0, 'gender':'male', 'arrival_date':''};
     }
 
     // Element label.
@@ -178,6 +178,32 @@
     }
 
     $('#teacher-row-2-cell-4-'+idNb).append(GETTER.teacher.createElement('input', attribs));
+
+
+    // Element label.
+    attribs = {'title':Joomla.JText._('COM_NOTEBOOK_ARRIVAL_DATE_LABEL'), 'class':'item-label', 'id':'teacher-arrival-date-label-'+idNb};
+    $('#teacher-row-2-cell-5-'+idNb).append(GETTER.teacher.createElement('span', attribs));
+    $('#teacher-arrival-date-label-'+idNb).text(Joomla.JText._('COM_NOTEBOOK_ARRIVAL_DATE_LABEL'));
+
+    // Text input tag:
+    /*attribs = {'class':'field-calendar', 'id':'field-calendar-'+idNb};
+    $('#teacher-row-2-cell-5-'+idNb).append(GETTER.teacher.createElement('div', attribs));
+    attribs = {'class':'input-append', 'id':'input-append-'+idNb};
+    $('#field-calendar-'+idNb).append(GETTER.teacher.createElement('div', attribs));
+    attribs = {'type':'text', 'name':'teacher_arrival_date_'+idNb, 'id':'teacher-arrival-date-'+idNb, 'data-alt-value':''};
+    $('#input-append-'+idNb).append(GETTER.teacher.createElement('input', attribs));
+    //attribs = {'class':'btn btn-secondary', 'id':'date-btn'+idNb+'_btn', 'data-inputfield':'date-btn'+idNb, 'data-weekend':'0,6'};
+    button = GETTER.teacher.createButton('calendar', idNb)
+    button.id = 'teacher-arrival-date-btn'+idNb+'_btn';
+    button.setAttribute('data-inputfield', 'date-btn'+idNb);
+    button.setAttribute('data-weekend', '0,6');
+    button.setAttribute('data-dayformat', '%d-%m-%Y %H:%M:%S');
+    //alert(notebookCalendar.arrival_date.button['today-btn']);
+    button.setAttribute('data-firstday', notebookCalendar.arrival_date.button.firstday);
+    $('#input-append-'+idNb).append(button);*/
+    GETTER.teacher.createCalendarField('arrival_date', idNb, 'teacher-row-2-cell-5-'+idNb, data.arrival_date);
+
+    //JoomlaCalendar(document.getElementById('field-calendar-'+idNb));
   }
 
   reverseOrder = function(direction, idNb, dynamicItemType) {

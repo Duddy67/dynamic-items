@@ -7,9 +7,14 @@
 
 defined('_JEXEC') or die('Restricted access'); // No direct access to this file.
 
+JLoader::register('CalendarTrait', JPATH_ADMINISTRATOR.'/components/com_notebook/traits/calendar.php');
+
 
 class NotebookModelNote extends JModelAdmin
 {
+  use CalendarTrait;
+
+
   //Prefix used with the controller messages.
   protected $text_prefix = 'COM_NOTEBOOK';
 

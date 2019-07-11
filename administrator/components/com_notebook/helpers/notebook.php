@@ -83,6 +83,7 @@ class NotebookHelper
     JText::script('COM_NOTEBOOK_BUTTON_ADD_LABEL');
     JText::script('COM_NOTEBOOK_BUTTON_SELECT_LABEL');
     JText::script('COM_NOTEBOOK_BUTTON_REMOVE_LABEL');
+    JText::script('COM_NOTEBOOK_BUTTON_CALENDAR_LABEL');
     JText::script('COM_NOTEBOOK_REMOVE_DYNAMIC_ITEM');
     JText::script('COM_NOTEBOOK_ALERT_MANDATORY_FIELD');
     JText::script('COM_NOTEBOOK_ALERT_VALUE_TYPE_NOT_VALID');
@@ -90,6 +91,7 @@ class NotebookHelper
     JText::script('COM_NOTEBOOK_NAME_LABEL');
     JText::script('COM_NOTEBOOK_LEVEL_LABEL');
     JText::script('COM_NOTEBOOK_GENDER_LABEL');
+    JText::script('COM_NOTEBOOK_ARRIVAL_DATE_LABEL');
     JText::script('COM_NOTEBOOK_CERTIFIED_LABEL');
     JText::script('COM_NOTEBOOK_CLASSROOMS_LABEL');
     JText::script('COM_NOTEBOOK_GENDER_LABEL');

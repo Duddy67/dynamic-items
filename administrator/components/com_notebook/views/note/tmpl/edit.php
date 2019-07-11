@@ -11,6 +11,7 @@ JHtml::_('behavior.formvalidator');
 JHtml::_('behavior.keepalive');
 JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('behavior.modal');
+JHTML::_('behavior.calendar');
 
 //Prevent params layout (layouts/joomla/edit/params.php) to display twice some fieldsets.
 $this->ignore_fieldsets = array('details', 'permissions', 'jmetadata');

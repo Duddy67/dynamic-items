@@ -65,8 +65,8 @@ Omkod.DynamicItem = class {
     let label = Joomla.JText._('COM_'+this.componentName.toUpperCase()+'_BUTTON_'+action.toUpperCase()+'_LABEL');
     let attribs = {'class':'btn', 'title':label};
     let button = this.createElement('button', attribs);
-    let classes = {'add':'btn-primary', 'remove':'btn-danger', 'select':'btn-info'};
-    let icons = {'add':'plus-2', 'remove':'remove', 'select':'list'};
+    let classes = {'add':'btn-primary', 'remove':'btn-danger', 'select':'btn-info', 'calendar':'btn-secondary'};
+    let icons = {'add':'plus-2', 'remove':'remove', 'select':'list', 'calendar':'calendar'};
 
     if(action == 'add') {
       button.addEventListener('click', (e) => { e.preventDefault(); this.createItem(); } );
@@ -78,6 +78,12 @@ Omkod.DynamicItem = class {
 
     if(action == 'select') {
       button.addEventListener('click', (e) => { e.preventDefault(); SqueezeBox.open(modal, {handler: 'iframe', size: {x: 800, y: 530}}); } );
+    }
+
+    if(action == 'calendar') {
+      button.addEventListener('click', (e) => { e.preventDefault(); } );
+      // No label on the calendar button.
+      label = '';
     }
 
     button.classList.add(classes[action]);
@@ -735,5 +741,27 @@ Omkod.DynamicItem = class {
 	item.classList.add(this.itemType+'-even');
       }
     }
+  }
+
+
+  createCalendarField(name, idNb, rowCellId, value) {
+    let id = name.replace(/_/g, '-');
+    //alert(loc);
+    let attribs = {'class':'field-calendar', 'id':id+'-field-calendar-'+idNb};
+    document.getElementById(rowCellId).appendChild(this.createElement('div', attribs)); 
+    //let calendar = this.createElement('div', attribs);
+    attribs = {'class':'input-append', 'id':id+'-input-append-'+idNb};
+    document.getElementById(id+'-field-calendar-'+idNb).appendChild(this.createElement('div', attribs)); 
+    attribs = {'type':'text', 'name':this.itemType+'_'+name+idNb, 'id':this.itemType+'-'+id+idNb, 'data-alt-value':''};
+    document.getElementById(id+'-input-append-'+idNb).appendChild(this.createElement('input', attribs)); 
+    let button = this.createButton('calendar', idNb)
+    button.id = this.itemType+'-'+id+'-btn'+idNb+'_btn';
+    button.setAttribute('data-inputfield', 'date-btn'+idNb);
+    button.setAttribute('data-weekend', '0,6');
+    button.setAttribute('data-dayformat', '%d-%m-%Y %H:%M:%S');
+    button.setAttribute('data-firstday', notebookCalendar.arrival_date.button.firstday);
+    document.getElementById(id+'-input-append-'+idNb).appendChild(button); 
+    //return calendar;
+    let calendar = new JoomlaCalendar(document.getElementById('arrival-date-field-calendar-'+idNb));
   }
 }
