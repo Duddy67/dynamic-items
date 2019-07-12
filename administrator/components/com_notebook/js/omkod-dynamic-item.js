@@ -745,23 +745,54 @@ Omkod.DynamicItem = class {
 
 
   createCalendarField(name, idNb, rowCellId, value) {
+    // Gets the input and button tag attributes for this field.
+    let calendar = window[this.componentName+'Calendar'];
+    calendar = calendar[name];
+
+    // Checks for error.
+    if(calendar === undefined) {
+      return;
+    }
+
+    // Gets the input id attribute by replacing the possible underscores with hyphens.
     let id = name.replace(/_/g, '-');
-    //alert(loc);
-    let attribs = {'class':'field-calendar', 'id':id+'-field-calendar-'+idNb};
+
+    let attribs = {'class':'field-calendar', 'id':this.itemType+'-'+id+'-field-calendar-'+idNb};
     document.getElementById(rowCellId).appendChild(this.createElement('div', attribs)); 
-    //let calendar = this.createElement('div', attribs);
-    attribs = {'class':'input-append', 'id':id+'-input-append-'+idNb};
-    document.getElementById(id+'-field-calendar-'+idNb).appendChild(this.createElement('div', attribs)); 
-    attribs = {'type':'text', 'name':this.itemType+'_'+name+idNb, 'id':this.itemType+'-'+id+idNb, 'data-alt-value':''};
-    document.getElementById(id+'-input-append-'+idNb).appendChild(this.createElement('input', attribs)); 
+
+    attribs = {'class':'input-append', 'id':this.itemType+'-'+id+'-input-append-'+idNb};
+    document.getElementById(this.itemType+'-'+id+'-field-calendar-'+idNb).appendChild(this.createElement('div', attribs)); 
+
+    attribs = {'type':'text', 'name':this.itemType+'_'+name+'_'+idNb, 'id':this.itemType+'-'+id+'-'+idNb, 'data-alt-value':value, 'value':value};
+
+    if(calendar.input.readonly) {
+      attribs.readonly = 'readonly';
+    }
+
+    if(calendar.input.disabled) {
+      attribs.disabled = 'disabled';
+    }
+
+    if(calendar.input.class) {
+      attribs.class = calendar.input.class;
+    }
+
+    document.getElementById(this.itemType+'-'+id+'-input-append-'+idNb).appendChild(this.createElement('input', attribs)); 
+
     let button = this.createButton('calendar', idNb)
-    button.id = this.itemType+'-'+id+'-btn'+idNb+'_btn';
-    button.setAttribute('data-inputfield', 'date-btn'+idNb);
-    button.setAttribute('data-weekend', '0,6');
-    button.setAttribute('data-dayformat', '%d-%m-%Y %H:%M:%S');
-    button.setAttribute('data-firstday', notebookCalendar.arrival_date.button.firstday);
-    document.getElementById(id+'-input-append-'+idNb).appendChild(button); 
-    //return calendar;
-    let calendar = new JoomlaCalendar(document.getElementById('arrival-date-field-calendar-'+idNb));
+    button.id = this.itemType+'-'+id+'-btn-'+idNb+'_btn';
+    button.setAttribute('data-inputfield', this.itemType+'-'+id+idNb);
+
+    for(let key in calendar.button) {
+      button.setAttribute('data-'+key, calendar.button[key]);
+    }
+
+    if(!calendar.input.readonly) {
+      //button.classList('hidden');
+    }
+
+    document.getElementById(this.itemType+'-'+id+'-input-append-'+idNb).appendChild(button); 
+    //
+    let cal = new JoomlaCalendar(document.getElementById(this.itemType+'-'+id+'-field-calendar-'+idNb));
   }
 }

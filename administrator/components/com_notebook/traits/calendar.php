@@ -10,8 +10,8 @@ defined('_JEXEC') or die('Restricted access');
 
 
 /**
- * Provides some utility functions relating to items linked to a product as attributes,
- * images and so on. 
+ * 
+ * 
  *
  */
 
@@ -61,8 +61,8 @@ trait CalendarTrait
 
 
   /**
-   * Sets the attributes of the given calendar fields then places it into the html page header
-   * as Javascript code in order to be used by dynamical items.
+   * Sets the button and input tag attributes of the given calendar fields then places them into the 
+   * html page header as Javascript code in order to be used by dynamical items.
    *
    * N.B: The settings is based on the layouts/joomla/form/field/calendar.php file.
    *
@@ -83,7 +83,7 @@ trait CalendarTrait
 
     foreach($fieldNames as $fieldName) {
       $field = $calendarFields[$fieldName];
-      // Stores the input attributes.
+      // Stores the input tag attributes.
       $input = array('readonly' => $field['readonly'], 'disabled' => $field['disabled'],  'class' => $field['class']);
 
       foreach($field as $key => $value) {
@@ -93,8 +93,8 @@ trait CalendarTrait
 	}
       }
 
+      // Sets the day format.
       if(!isset($field['dayformat']) && $field['translateformat']) {
-
 	if($field['showtime']) {
 	  $format = JText::_('DATE_FORMAT_CALENDAR_DATETIME');
 	}
@@ -105,7 +105,8 @@ trait CalendarTrait
 	$field['dayformat'] = $format;
       }
 
-      unset($field['translateformat']);
+      // Sets the attributes needed for the button tag then removes the unnecessary
+      // array elements.
 
       if(!isset($field['firstday'])) {
 	$field['firstday'] = JFactory::getLanguage()->getFirstDay();
@@ -133,6 +134,9 @@ trait CalendarTrait
       $field['show-others'] = (int)$field['filltable'];
       unset($field['filltable']);
 
+      unset($field['translateformat']);
+
+      // Stores the button and input tag attributes as a Javascript object.
       $js .= $fieldName.': { button: '.json_encode($field).', input: '.json_encode($input).'},'."\n";
     }
 
@@ -147,21 +151,25 @@ trait CalendarTrait
 
 
   /**
-   * Returns a Table object, always creating it.
+   * Convert a date in UTC format to a date in local format (according to
+   * the calendar field settings).
    *
-   * @param   string  $type    The table type to instantiate
-   * @param   string  $prefix  A prefix for the table class name. Optional.
-   * @param   array   $config  Configuration array for model. Optional.
+   * N.B: This code is based on the getInput() function in libraries/joomla/form/fields/calendar.php.
    *
-   * @return  JTable    A database object
+   * @param   string  $fieldName  The name of the calendar field.
+   * @param   string  $value      The date in UTC format to convert.
+   *
+   * @return  string              The given date converted in local format.
    */
   public function UTCToDate($fieldName, $value)
   {
+    // Gets the calendar ini file.
     $calendarFields = $this->getCalendarFields();
+    // Gets the given field.
     $field = $calendarFields[$fieldName];
 
     if($field['translateformat']) {
-      $format = ($field['showtime']) ? JText::_('DATE_FORMAT_FILTER_DATETIME') : JText::_('DATE_FORMAT_FILTER_DATE');
+      $format = ($field['showtime']) ? JText::_('DATE_FORMAT_CALENDAR_DATETIME') : JText::_('DATE_FORMAT_CALENDAR_DATE');
     }
 
     if($field['filter'] == 'server_utc') {
@@ -180,7 +188,7 @@ trait CalendarTrait
       if($value && $value != JFactory::getDbo()->getNullDate()) {
 	// Get a date object based on the correct timezone.
 	$date = JFactory::getDate($value, 'UTC');
-	$date->setTimezone($user->getTimezone());
+	$date->setTimezone(JFactory::getUser()->getTimezone());
 
 	// Transform the date string.
 	$value = $date->format('Y-m-d H:i:s', true, false);
@@ -191,7 +199,7 @@ trait CalendarTrait
     if($value && $value != JFactory::getDbo()->getNullDate() && strtotime($value) !== false) {
       $tz = date_default_timezone_get();
       date_default_timezone_set('UTC');
-      $value = strftime($this->format, strtotime($value));
+      $value = strftime($format, strtotime($value));
       date_default_timezone_set($tz);
     }
     else {
@@ -202,10 +210,27 @@ trait CalendarTrait
   }
 
 
+  /**
+   * Convert a date in local format (according to the calendar field settings) to a date
+   * in UTC format.
+   *
+   * N.B: This code is based on the filterField() function in libraries/src/Form/Form.php
+   *
+   * @param   string  $fieldName  The name of the calendar field.
+   * @param   string  $value      The date in local format to convert.
+   *
+   * @return  string              The given date converted in UTC format.
+   */
   public function DateToUTC($fieldName, $value)
   {
+    // Gets the calendar ini file.
     $calendarFields = $this->getCalendarFields();
+    // Gets the given field.
     $field = $calendarFields[$fieldName];
+
+    if(empty($value) || $value == JFactory::getDbo()->getNullDate()) {
+      return JFactory::getDbo()->getNullDate();
+    }
 
     if($field['translateformat']) {
       $format = ($field['showtime']) ? JText::_('DATE_FORMAT_FILTER_DATETIME') : JText::_('DATE_FORMAT_FILTER_DATE');
@@ -218,6 +243,7 @@ trait CalendarTrait
       }
     }
 
+    // Sets the default offset to UTC (in case no filter is set). 
     $offset = 'UTC';
 
     // Convert a date to UTC based on the server timezone offset.

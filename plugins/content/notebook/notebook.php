@@ -8,13 +8,17 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
+JLoader::register('CalendarTrait', JPATH_ADMINISTRATOR.'/components/com_notebook/traits/calendar.php');
+
 
 class plgContentNotebook extends JPlugin
 {
-    protected $post;
-    protected $jform;
+  use CalendarTrait;
 
-    /**
+  protected $post;
+  protected $jform;
+
+  /**
    * Constructor.
    *
    * @param   object  &$subject  The object to observe
@@ -59,18 +63,22 @@ class plgContentNotebook extends JPlugin
           $ordering = $this->post['teacher_ordering_'.$teacherNb];
           $certified = (int)isset($this->post['teacher_certified_'.$teacherNb]);
 	  $classRooms = '[]';
+          $arrivalDate = $this->post['teacher_arrival_date_'.$teacherNb];
           $gender = $this->post['teacher_gender_'.$teacherNb];
+
+	  // Converts datetimes in UTC format.
+	  $arrivalDate = $this->DateToUTC('arrival_date', $arrivalDate);
 
 	  if(isset($this->post['teacher_classrooms_'.$teacherNb])) {
 	    $classRooms = json_encode($this->post['teacher_classrooms_'.$teacherNb]);
 	  }
 
-	  $values[] = $data->id.','.$schoolId.','.$db->Quote($name).','.$db->Quote($level).','.$db->Quote($classRooms).','.$certified.','.$db->Quote($gender).','.$ordering;
+	  $values[] = $data->id.','.$schoolId.','.$db->Quote($name).','.$db->Quote($level).','.$db->Quote($classRooms).','.$certified.','.$db->Quote($gender).','.$db->Quote($arrivalDate).','.$ordering;
 	}
       }
 
       if(!empty($values)) {
-	$columns = array('note_id', 'school_id', 'name', 'level', 'classrooms', 'certified', 'gender', 'ordering');
+	$columns = array('note_id', 'school_id', 'name', 'level', 'classrooms', 'certified', 'gender', 'arrival_date', 'ordering');
 
 	$query->clear();
 	$query->insert('#__notebook_teacher')
