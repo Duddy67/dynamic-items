@@ -10,8 +10,8 @@ defined('_JEXEC') or die('Restricted access');
 
 
 /**
- * 
- * 
+ * Provides a set of functions allowing dynamical items to create 
+ * and manage Joomla calendar fields.
  *
  */
 
@@ -61,6 +61,20 @@ trait CalendarTrait
 
 
   /**
+   * Sets the button and input tag attributes of a given calendar field then places them into the 
+   * html page header as Javascript code in order to be used by dynamical items.
+   *
+   * @param   string  $fieldName    The calendar field name to set. 
+   *
+   * @return  boolean               True if successful, false otherwise. 
+   */
+  public function setCalendarField($fieldName)
+  {
+    return $this->setCalendarFields(array($fieldName));
+  }
+
+
+  /**
    * Sets the button and input tag attributes of the given calendar fields then places them into the 
    * html page header as Javascript code in order to be used by dynamical items.
    *
@@ -68,12 +82,19 @@ trait CalendarTrait
    *
    * @param   array   $fieldNames   An array of field names to set. 
    *
-   * @return  void
+   * @return  boolean               True if successful, false otherwise. 
    */
   public function setCalendarFields($fieldNames)
   {
     // Gets the calendar ini file.
     $calendarFields = $this->getCalendarFields();
+    $app = JFactory::getApplication();
+
+    // Checks for error.
+    if(empty($calendarFields)) {
+      $app->enqueueMessage(JText::_('COM_NOTEBOOK_ERROR_INI_FILE_NOT_FOUND'), 'error');
+      return false;
+    }
 
     $skip = array('format', 'filter', 'readonly', 'disabled', 'class');
 
@@ -82,7 +103,14 @@ trait CalendarTrait
     $js = 'var notebookCalendar = { '."\n";
 
     foreach($fieldNames as $fieldName) {
-      $field = $calendarFields[$fieldName];
+      $field = @$calendarFields[$fieldName];
+
+      // Checks for error.
+      if($field === null) {
+	$app->enqueueMessage(JText::sprintf('COM_NOTEBOOK_ERROR_CALENDAR_FIELD_DO_NOT_EXIST', $fieldName), 'error');
+	return false;
+      }
+
       // Stores the input tag attributes.
       $input = array('readonly' => $field['readonly'], 'disabled' => $field['disabled'],  'class' => $field['class']);
 
@@ -147,19 +175,21 @@ trait CalendarTrait
     // Places the Javascript code into the html page header.
     $doc = JFactory::getDocument();
     $doc->addScriptDeclaration($js);
+
+    return true;
   }
 
 
   /**
-   * Convert a date in UTC format to a date in local format (according to
+   * Convert a UTC date in a local date  and translates the datime format as well, (according to 
    * the calendar field settings).
    *
    * N.B: This code is based on the getInput() function in libraries/joomla/form/fields/calendar.php.
    *
    * @param   string  $fieldName  The name of the calendar field.
-   * @param   string  $value      The date in UTC format to convert.
+   * @param   string  $value      The UTC date to convert.
    *
-   * @return  string              The given date converted in local format.
+   * @return  string              The given date converted in local.
    */
   public function UTCToDate($fieldName, $value)
   {
@@ -211,15 +241,15 @@ trait CalendarTrait
 
 
   /**
-   * Convert a date in local format (according to the calendar field settings) to a date
-   * in UTC format.
+   * Convert a local date to a UTC date and translates the datime format as well, (according to 
+   * the calendar field settings). 
    *
    * N.B: This code is based on the filterField() function in libraries/src/Form/Form.php
    *
    * @param   string  $fieldName  The name of the calendar field.
-   * @param   string  $value      The date in local format to convert.
+   * @param   string  $value      The local date to convert.
    *
-   * @return  string              The given date converted in UTC format.
+   * @return  string              The given date converted in UTC.
    */
   public function DateToUTC($fieldName, $value)
   {

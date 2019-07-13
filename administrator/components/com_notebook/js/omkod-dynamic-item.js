@@ -744,6 +744,16 @@ Omkod.DynamicItem = class {
   }
 
 
+  /**
+   * Creates a Joomla calendar field in a given location.
+   *
+   * @param   string    name		The name of the calendar field.
+   * @param   integer   idNb		The item id number.
+   * @param   string    rowCellId	The location where the calendar field is created.
+   * @param   string    value		The datetime value.
+   *
+   * @return  void
+  */
   createCalendarField(name, idNb, rowCellId, value) {
     // Gets the input and button tag attributes for this field.
     let calendar = window[this.componentName+'Calendar'];
@@ -757,13 +767,17 @@ Omkod.DynamicItem = class {
     // Gets the input id attribute by replacing the possible underscores with hyphens.
     let id = name.replace(/_/g, '-');
 
+    // Creates the wraping divs.
     let attribs = {'class':'field-calendar', 'id':this.itemType+'-'+id+'-field-calendar-'+idNb};
     document.getElementById(rowCellId).appendChild(this.createElement('div', attribs)); 
 
     attribs = {'class':'input-append', 'id':this.itemType+'-'+id+'-input-append-'+idNb};
     document.getElementById(this.itemType+'-'+id+'-field-calendar-'+idNb).appendChild(this.createElement('div', attribs)); 
 
+    // Creates the input tag where the datetime is diplayed.
     attribs = {'type':'text', 'name':this.itemType+'_'+name+'_'+idNb, 'id':this.itemType+'-'+id+'-'+idNb, 'data-alt-value':value, 'value':value};
+
+    // Sets some extra attributes according to the ini file setting.
 
     if(calendar.input.readonly) {
       attribs.readonly = 'readonly';
@@ -779,20 +793,24 @@ Omkod.DynamicItem = class {
 
     document.getElementById(this.itemType+'-'+id+'-input-append-'+idNb).appendChild(this.createElement('input', attribs)); 
 
+    // Creates the calendar button.
     let button = this.createButton('calendar', idNb)
     button.id = this.itemType+'-'+id+'-btn-'+idNb+'_btn';
     button.setAttribute('data-inputfield', this.itemType+'-'+id+idNb);
 
+    // Sets button attributes coming from the ini file.
     for(let key in calendar.button) {
       button.setAttribute('data-'+key, calendar.button[key]);
     }
 
-    if(!calendar.input.readonly) {
-      //button.classList('hidden');
+    if(calendar.input.readonly) {
+      // Button is not displayed in readonly mode.
+      button.classList.add('hidden');
     }
 
     document.getElementById(this.itemType+'-'+id+'-input-append-'+idNb).appendChild(button); 
-    //
+
+    // Instanciates a new Joomla calendar object.
     let cal = new JoomlaCalendar(document.getElementById(this.itemType+'-'+id+'-field-calendar-'+idNb));
   }
 }

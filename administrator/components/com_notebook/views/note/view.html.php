@@ -33,9 +33,8 @@ class NotebookViewNote extends JViewLegacy
     $this->setDocument();
 
     NotebookHelper::setJavascriptText();
-    $calendarFields = $this->getModel()->getCalendarFields();
-    var_dump($calendarFields['arrival_date']['weeknumbers']);
-    $this->getModel()->setCalendarFields(array('arrival_date'));
+    // Loads the calendar field settings.
+    $this->getModel()->setCalendarField('arrival_date');
 
     //Display the template.
     parent::display($tpl);
