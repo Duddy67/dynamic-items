@@ -97,4 +97,17 @@ div[class$='-even'] {
   background-color: #fff;
 }
 
+.clear-btn {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  margin-right: -1px !important;
+}
 
+.select-btn {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.selected-item-name {
+  width: 300px;
+}

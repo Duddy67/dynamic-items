@@ -65,8 +65,8 @@ Omkod.DynamicItem = class {
     let label = Joomla.JText._('COM_'+this.componentName.toUpperCase()+'_BUTTON_'+action.toUpperCase()+'_LABEL');
     let attribs = {'class':'btn', 'title':label};
     let button = this.createElement('button', attribs);
-    let classes = {'add':'btn-primary', 'remove':'btn-danger', 'select':'btn-info', 'calendar':'btn-secondary'};
-    let icons = {'add':'plus-2', 'remove':'remove', 'select':'list', 'calendar':'calendar'};
+    let classes = {'add':'btn-primary', 'remove':'btn-danger', 'select':'btn-warning', 'calendar':'btn-secondary', 'clear':'btn'};
+    let icons = {'add':'plus-2', 'remove':'remove', 'select':'list', 'calendar':'calendar', 'clear':'remove'};
 
     if(action == 'add') {
       button.addEventListener('click', (e) => { e.preventDefault(); this.createItem(); } );
@@ -78,11 +78,19 @@ Omkod.DynamicItem = class {
 
     if(action == 'select') {
       button.addEventListener('click', (e) => { e.preventDefault(); SqueezeBox.open(modal, {handler: 'iframe', size: {x: 800, y: 530}}); } );
+      button.classList.add('select-btn');
     }
 
     if(action == 'calendar') {
       button.addEventListener('click', (e) => { e.preventDefault(); } );
       // No label on the calendar button.
+      label = '';
+    }
+
+    if(action == 'clear') {
+      button.addEventListener('click', (e) => { e.preventDefault(); } );
+      button.classList.add('clear-btn');
+      // No label on the clear button.
       label = '';
     }
 

@@ -133,8 +133,8 @@ class NotebookModelNote extends JModelAdmin
     foreach($teachers as $key => $teacher) {
       // Values from multiple select tags are encoded in JSON.   
       $teachers[$key]['classrooms'] = json_decode($teacher['classrooms']);
-      // Convert the datetime in UTC format coming from the database to a datetime in local 
-      // format (according to the calendar field settings).
+      // Convert the UTC datetime coming from the database to a local datetime 
+      // (according to the calendar field settings).
       $teachers[$key]['arrival_date'] = $this->UTCToDate('arrival_date', $teacher['arrival_date']);
     }
 

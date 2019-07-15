@@ -67,8 +67,11 @@
     attribs = {'type':'hidden', 'name':'teacher_school_id_'+idNb, 'id':'teacher-school-id-'+idNb, 'value':data.school_id};
     let elem = GETTER.teacher.createElement('input', attribs);
     $('#teacher-row-1-cell-1-'+idNb).append(elem);
+    let button = GETTER.teacher.createButton('clear', idNb);
+    button.setAttribute('onclick', 'clearItemSelection(\'teacher-school-id-'+idNb+'\', \'teacher-school-name-'+idNb+'\');');
+    $('#teacher-row-1-cell-1-'+idNb).append(button);
     let url = $('#root-location').val()+'administrator/index.php?option=com_notebook&view=notes&layout=modal&tmpl=component&function=selectSchoolItem&dynamic_item_type=teacher&id_nb='+idNb;
-    let button = GETTER.teacher.createButton('select', idNb, url);
+    button = GETTER.teacher.createButton('select', idNb, url);
     $('#teacher-row-1-cell-1-'+idNb).append(button);
 
     // Element label.
@@ -76,7 +79,7 @@
     $('#teacher-row-1-cell-2-'+idNb).append(GETTER.teacher.createElement('span', attribs));
     $('#teacher-schoolname-label-'+idNb).text(Joomla.JText._('COM_NOTEBOOK_SCHOOL_LABEL'));
 
-    attribs = {'type':'text', 'disabled':'disabled', 'id':'teacher-school-name-'+idNb, 'value':data.school_name};
+    attribs = {'type':'text', 'disabled':'disabled', 'id':'teacher-school-name-'+idNb, 'class':'selected-item-name', 'value':data.school_name};
     elem = GETTER.teacher.createElement('input', attribs);
     $('#teacher-row-1-cell-2-'+idNb).append(elem);
 
@@ -185,7 +188,7 @@
     $('#teacher-row-2-cell-5-'+idNb).append(GETTER.teacher.createElement('span', attribs));
     $('#teacher-arrival-date-label-'+idNb).text(Joomla.JText._('COM_NOTEBOOK_ARRIVAL_DATE_LABEL'));
 
-    // Calendar field:
+    // Calendar field.
     GETTER.teacher.createCalendarField('arrival_date', idNb, 'teacher-row-2-cell-5-'+idNb, data.arrival_date);
   }
 
@@ -210,6 +213,13 @@
 
   afterRemoveItem = function(idNb, dynamicItemType) {
     // Execute here possible tasks after the item deletion.
+  }
+
+  // IMPORTANT: Do not call this function "clear" or "clearSelection" as these functions
+  //            already exist somewhere in the code. 
+  clearItemSelection = function(valueId, nameId) {
+    $('#'+valueId).val('');
+    $('#'+nameId).val('');
   }
 
 })(jQuery);
